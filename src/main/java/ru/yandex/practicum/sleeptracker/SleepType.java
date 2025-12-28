@@ -43,7 +43,6 @@ public class SleepType implements SleepAnalyzer {
     }
 
     private String classifySession(SleepSession session) {
-        // Уже отфильтровано в apply(), но для надёжности
         if (session == null || !session.isNightSleep()) {
             return null;
         }
@@ -57,11 +56,9 @@ public class SleepType implements SleepAnalyzer {
 
         if (start.isAfter(LocalTime.of(23, 0)) && end.isAfter(LocalTime.of(9, 0))) {
             return "Сова";
-        }
-        else if (start.isBefore(LocalTime.of(22, 0)) && end.isBefore(LocalTime.of(7, 0))) {
+        } else if (start.isBefore(LocalTime.of(22, 0)) && end.isBefore(LocalTime.of(7, 0))) {
             return "Жаворонок";
-        }
-        else {
+        } else {
             return "Голубь";
         }
     }
