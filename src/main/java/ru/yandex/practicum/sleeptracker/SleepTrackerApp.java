@@ -72,6 +72,9 @@ public class SleepTrackerApp {
                         }
                     })
                     .toList();
+        } catch (IOException e) {
+            System.out.println("Не удалось прочитать файл '" + path + "': " + e.getMessage());
+            throw e;
         }
     }
 }
