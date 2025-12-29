@@ -80,9 +80,9 @@ public class SleepTrackerAppTest {
     void testSleepTypeDetectsLark() {
         assertEquals("Жаворонок", testSleepType.apply(SleepTrackerAppTest.LARK_DOMINANT).value());
     }
-    
+
     @Test
-    void tieGoesToPigeon() {
+    void testSieGoesToPigeon() {
         assertEquals("Голубь", testSleepType.apply(SleepTrackerAppTest.MIXED_TYPES).value());
     }
 
