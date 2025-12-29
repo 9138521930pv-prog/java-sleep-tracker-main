@@ -5,6 +5,7 @@ import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class SleepTrackerApp {
 
@@ -55,17 +56,22 @@ public class SleepTrackerApp {
     }
 
     private static List<SleepSession> load(String path) throws Exception {
-        return Files.lines(Paths.get(path))
-                .map(String::trim)
-                .filter(line -> !line.isEmpty())
-                .map(line -> {
-                    String[] p = line.split(";");
-                    LocalDateTime start = LocalDateTime.parse(p[0], FORMATTER);
-                    LocalDateTime end = LocalDateTime.parse(p[1], FORMATTER);
-                    SleepState state = SleepState.valueOf(p[2]);
-                    return new SleepSession(start, end, state);
-                })
-                .toList();
+        try (Stream<String> lines = Files.lines(Paths.get(path))) {
+            return lines
+                    .map(String::trim)
+                    .filter(line -> !line.isEmpty())
+                    .map(line -> {
+                        try {
+                            String[] p = line.split(";");
+                            LocalDateTime start = LocalDateTime.parse(p[0], FORMATTER);
+                            LocalDateTime end = LocalDateTime.parse(p[1], FORMATTER);
+                            SleepState state = SleepState.valueOf(p[2]);
+                            return new SleepSession(start, end, state);
+                        } catch (Exception e) {
+                            throw new IllegalArgumentException("Ошибка парсинга строки: " + line, e);
+                        }
+                    })
+                    .toList();
+        }
     }
-
 }

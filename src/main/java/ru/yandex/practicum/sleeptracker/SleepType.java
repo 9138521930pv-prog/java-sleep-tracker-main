@@ -15,29 +15,31 @@ public class SleepType implements SleepAnalyzer {
                 .filter(SleepSession::isNightSleep)
                 .toList();
 
-
         if (nightList.isEmpty()) {
             return new AnalysisResult("Тип сна", "Голубь");
         }
 
-        // Группируем только валидные сеансы (без null)
         Map<String, Long> typeCounts = nightList.stream()
                 .map(this::classifySession)
-                .filter(type -> type != null) // исключаем null (на случай ошибок)
+                .filter(type -> type != null)
                 .collect(Collectors.groupingBy(
                         Function.identity(),
                         Collectors.counting()
                 ));
 
-        // Определяем доминирующий тип
-        String dominantType = Map.of(
-                        "Сова", typeCounts.getOrDefault("Сова", 0L),
-                        "Жаворонок", typeCounts.getOrDefault("Жаворонок", 0L),
-                        "Голубь", typeCounts.getOrDefault("Голубь", 0L)
-                ).entrySet().stream()
-                .max(Map.Entry.comparingByValue())
+        long maxCount = typeCounts.values().stream()
+                .mapToLong(Long::longValue)
+                .max()
+                .orElse(0L);
+
+        List<String> maxTypes = typeCounts.entrySet().stream()
+                .filter(entry -> entry.getValue() == maxCount)
                 .map(Map.Entry::getKey)
-                .orElse("Голубь"); // запасной вариант (маловероятен)
+                .toList();
+
+        String dominantType = (maxTypes.size() == 1)
+                ? maxTypes.get(0)
+                : "Голубь";
 
         return new AnalysisResult("Тип сна", dominantType);
     }

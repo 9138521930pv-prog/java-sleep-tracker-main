@@ -43,8 +43,7 @@ public class SleepTrackerAppTest {
 
     public static final List<SleepSession> MIXED_TYPES = List.of(
             create("20.12.25 23:30", "21.12.25 09:30", SleepState.NORMAL),
-            create("21.12.25 21:45", "22.12.25 06:35", SleepState.GOOD),
-            create("23.12.25 21:30", "24.12.25 06:30", SleepState.GOOD)
+            create("21.12.25 21:45", "22.12.25 06:35", SleepState.GOOD)
     );
 
     private final TotalSessions testTotalSessions = new TotalSessions();
@@ -80,6 +79,10 @@ public class SleepTrackerAppTest {
     @Test
     void testSleepTypeDetectsLark() {
         assertEquals("Жаворонок", testSleepType.apply(SleepTrackerAppTest.LARK_DOMINANT).value());
+    }
+    @Test
+    void tieGoesToPigeon() {
+        assertEquals("Голубь", testSleepType.apply(SleepTrackerAppTest.MIXED_TYPES).value());
     }
 
     @Test
