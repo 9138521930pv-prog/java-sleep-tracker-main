@@ -88,7 +88,7 @@ public class SleepTrackerAppTest {
 
     @Test
     void testSleepTypeTieGoesToPigeon() {
-        assertEquals("Жаворонок", testSleepType.apply(SleepTrackerAppTest.MIXED_TYPES).value());
+        assertEquals("Голубь", testSleepType.apply(SleepTrackerAppTest.MIXED_TYPES).value());
     }
 
     @Test
